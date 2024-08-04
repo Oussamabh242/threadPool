@@ -5,6 +5,7 @@
 #include<time.h>
 #include "queue.h"
 
+#define MAX_THREADS 5 
 
 typedef struct {
   Queue *q ;
@@ -42,7 +43,7 @@ void *start_thread(void *args){
 
 int main(int argc, char *argv[])
 {
-  pthread_t th[5] ; 
+  pthread_t th[MAX_THREADS] ; 
   Queue *q = q_init() ;
   srand((time(NULL))) ; 
   for(int i= 0 ; i<10 ; i++){
@@ -50,12 +51,12 @@ int main(int argc, char *argv[])
     printf("enqueueing %d ...\n" ,task) ; 
     q_insert(task ,q) ; 
   } 
-  for(int i = 0 ; i<5 ; i++){
+  for(int i = 0 ; i<MAX_THREADS ; i++){
     if(pthread_create(&th[i] ,NULL , start_thread ,(void *)q) !=0){
       perror("Thread Creation Faild \n") ; 
     }
   }
-  for(int i = 0 ; i<5 ; i++){
+  for(int i = 0 ; i<MAX_THREADS ; i++){
     if(pthread_join(th[i] , NULL) != 0){
       perror("Faild to join the thread .. \n") ;
     }
@@ -63,5 +64,7 @@ int main(int argc, char *argv[])
   pthread_mutex_init(&q_mutex,NULL) ;
 
   pthread_mutex_destroy(&q_mutex) ; 
+  q_destroy(q) ; 
+
   return EXIT_SUCCESS;
 }
