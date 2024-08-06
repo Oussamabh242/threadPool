@@ -32,7 +32,7 @@ To compile the server, use the following command:
 Run the compiled server:
 
 ```bash
-   ./server <number_of_threads>
+./server <number_of_threads>
 ```
 The server will start and listen for incoming connections on `127.0.0.1:65432`.
 
